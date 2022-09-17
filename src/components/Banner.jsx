@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const Banner = () => {
   const [movie, setMovie] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -20,29 +21,55 @@ const Banner = () => {
       ].id;
     //특정영화의 더 상세한 정보를 가지고 오기(비디오 정보도 포함)
     const { data: movieDetail } = await axios.get(`movie/${movieId}`, {
-      params: { append_to_response: "video" },
+      params: { append_to_response: "videos" },
     });
     setMovie(movieDetail);
   };
 
-  return (
-    <>
-      <HeaderBlock
-        imageUrl={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-      >
-        <BannerContentsWrap>
-          <BannerTitle>
-            {movie.title || movie.name || movie.original}
-          </BannerTitle>
-          <BannerButtonsWrap>
-            <PlayButton>Play</PlayButton>
-            <InfoButton>Info</InfoButton>
-          </BannerButtonsWrap>
-          <BannerDescription>{movie.overview}</BannerDescription>
-        </BannerContentsWrap>
-      </HeaderBlock>
-    </>
-  );
+  if (!isClicked) {
+    return (
+      <>
+        <HeaderBlock
+          imageUrl={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+        >
+          <BannerContentsWrap>
+            <BannerTitle>
+              {movie.title || movie.name || movie.original}
+            </BannerTitle>
+            <BannerButtonsWrap>
+              <PlayButton
+                onClick={() => {
+                  setIsClicked(true);
+                }}
+              >
+                Play
+              </PlayButton>
+              <InfoButton>Info</InfoButton>
+            </BannerButtonsWrap>
+            <BannerDescription>{movie.overview}</BannerDescription>
+          </BannerContentsWrap>
+        </HeaderBlock>
+      </>
+    );
+  } else {
+    return (
+      <Container>
+        <HomeContainer>
+          <Iframe
+            width="560"
+            height="315"
+            Secure="true"
+            Samesite="None"
+            src={`https://www.youtube.com/embed/${movie.videos.results[0].key}
+            ?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.videos.results[0].key}`}
+            frameborder="0"
+            allow="autoplay; fullscreen;"
+            allowfullscreen
+          ></Iframe>
+        </HomeContainer>
+      </Container>
+    );
+  }
 };
 
 const HeaderBlock = styled.header`
@@ -107,12 +134,12 @@ const BannerDescription = styled.div`
   line-height: 1.5;
   padding-top: 20px;
   font-weight: 500;
-  font-size: 0.9vw;
+  font-size: 1vw;
   height: 80px;
   text-align: left;
 
   @media screen and (max-width: 1500px) {
-    font-size: 2.5vw;
+    font-size: 1.3vw;
     max-width: 40vw;
     line-height: 2;
   }
@@ -132,7 +159,9 @@ const BannerButtonsWrap = styled.div`
   flex-direction: row;
 `;
 
-const PlayButton = styled.button`
+const Button = styled.button`
+  width: 90px;
+  padding: 8px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -141,9 +170,11 @@ const PlayButton = styled.button`
   border: none;
   font-size: 1rem;
   font-weight: 700;
-  border-radius: 0.2vw;
-  padding: 0.4rem 1.8rem 0.4rem 1rem;
-  margin-right: 1rem;
+  border-radius: 0.8vw;
+`;
+
+const PlayButton = styled(Button)`
+  margin-right: 15px;
   background-color: white;
   color: black;
 
@@ -154,18 +185,7 @@ const PlayButton = styled.button`
   }
 `;
 
-const InfoButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 0.2vw;
-  padding: 0.4rem 1.8rem 0.4rem 1rem;
-  margin-right: 1rem;
+const InfoButton = styled(Button)`
   background-color: rgba(60, 60, 60, 0.7);
   color: white;
 
@@ -174,10 +194,38 @@ const InfoButton = styled.button`
     color: white;
     transition: all 0.2s;
   }
+`;
 
-  @media screen and (max-width: 900px) {
-    text-align: start;
-    padding-right: 1.2rem;
+//isClicked가 ture 일 때 변경되는 UI
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const HomeContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
+
+const Iframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.65;
+  border: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
   }
 `;
 
