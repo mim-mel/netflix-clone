@@ -29,9 +29,7 @@ const Banner = () => {
   if (!isClicked) {
     return (
       <>
-        <HeaderBlock
-          imageUrl={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-        >
+        <HeaderBlock img={movie.backdrop_path}>
           <BannerContentsWrap>
             <BannerTitle>
               {movie.title || movie.name || movie.original}
@@ -79,7 +77,7 @@ const HeaderBlock = styled.header`
       rgba(37, 37, 37, 0.61),
       #111
     ),
-    url(${(props) => props.imageUrl});
+    url(https://image.tmdb.org/t/p/original/${(props) => props.img});
   position: relative;
   background-position: top center;
   background-size: cover;
