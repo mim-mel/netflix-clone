@@ -13,14 +13,20 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
     setMovies(request.data.results);
   };
 
-  console.log(movies);
+  const handleLeft = () => {
+    document.getElementById(id).scrollLeft -= window.innerWidth - 80;
+  };
+
+  const handleRight = () => {
+    document.getElementById(id).scrollLeft += window.innerWidth + 80;
+  };
 
   return (
     <RowBlock>
       <h2>{title}</h2>
       <Slider>
         <SliderArrowLeft>
-          <ArrowLeft>{"<"}</ArrowLeft>
+          <ArrowLeft onClick={handleLeft}>{"<"}</ArrowLeft>
         </SliderArrowLeft>
         <RowPosters id={id}>
           {/* 값을 못찾는 것을 방지하기 위해 방어코드 작성 */}
@@ -41,7 +47,7 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
           ))}
         </RowPosters>
         <SliderArrowRight>
-          <ArrowRight>{">"}</ArrowRight>
+          <ArrowRight onClick={handleRight}>{">"}</ArrowRight>
         </SliderArrowRight>
       </Slider>
     </RowBlock>
