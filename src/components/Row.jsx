@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import styled from "styled-components";
+import MovieModal from "./MovieModal";
 
 const Row = ({ isLargeRow, title, id, fetchUrl }) => {
   const [movies, setMovies] = useState();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [movieSelected, setMovieSelected] = useState({});
+
   useEffect(() => {
     fetchMovieData();
   }, []);
@@ -21,6 +25,11 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
     document.getElementById(id).scrollLeft += window.innerWidth + 80;
   };
 
+  const handleClick = (movie) => {
+    setModalOpen(true);
+    setMovieSelected(movie);
+  };
+
   return (
     <RowBlock>
       <h2>{title}</h2>
@@ -36,11 +45,13 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
                 <RowPosterLarge
                   src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   alt={movie.name}
+                  onClick={() => handleClick(movie)}
                 />
               ) : (
                 <RowPosterNormal
                   src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
                   alt={movie.name}
+                  onClick={() => handleClick(movie)}
                 />
               )}
             </>
@@ -50,6 +61,9 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
           <ArrowRight onClick={handleRight}>{">"}</ArrowRight>
         </SliderArrowRight>
       </Slider>
+      {modalOpen && (
+        <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
+      )}
     </RowBlock>
   );
 };
@@ -149,9 +163,6 @@ const ArrowRight = styled(Arrow)`
   align-items: center;
 `;
 
-const RowPosterMapWrap = styled.div`
-  width: 100%;
-`;
 const RowPosters = styled.div`
   display: flex;
   overflow-y: hidden;
