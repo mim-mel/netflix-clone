@@ -148,6 +148,10 @@ const ArrowRight = styled(Arrow)`
   display: flex;
   align-items: center;
 `;
+
+const RowPosterMapWrap = styled.div`
+  width: 100%;
+`;
 const RowPosters = styled.div`
   display: flex;
   overflow-y: hidden;
