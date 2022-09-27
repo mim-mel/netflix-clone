@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Nav = () => {
   const [show, setShow] = useState(false);
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
+    window.addEventListener('scroll', () => {
       if (window.scrollY > 50) {
         setShow(true);
       } else {
@@ -18,7 +18,7 @@ const Nav = () => {
     });
 
     return () => {
-      window.removeEventListener("scroll", () => {});
+      window.removeEventListener('scroll', () => {});
     };
   }, []);
 
@@ -64,7 +64,7 @@ const NavBlock = styled.nav`
   align-items: center;
   transition-timing-function: ease-in;
   transition: all 0.5s;
-  background: ${(props) => props.show && "black"};
+  background: ${(props) => props.show && 'black'};
 `;
 
 const NavBlack = styled.div`
