@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import axios from "../api/axios";
-import styled from "styled-components";
-import MovieModal from "./MovieModal";
+import { useEffect, useState } from 'react';
+import axios from '../api/axios';
+import styled from 'styled-components';
+import MovieModal from './MovieModal';
 
 const Row = ({ isLargeRow, title, id, fetchUrl }) => {
   const [movies, setMovies] = useState();
@@ -35,30 +35,36 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
       <h2>{title}</h2>
       <Slider>
         <SliderArrowLeft>
-          <ArrowLeft onClick={handleLeft}>{"<"}</ArrowLeft>
+          <ArrowLeft onClick={handleLeft}>{'<'}</ArrowLeft>
         </SliderArrowLeft>
         <RowPosters id={id}>
           {/* 값을 못찾는 것을 방지하기 위해 방어코드 작성 */}
-          {movies?.map((movie) => (
+          {isLargeRow ? (
             <>
-              {isLargeRow ? (
+              {movies?.map((movie) => (
                 <RowPosterLarge
+                  key={movie.id}
                   src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   alt={movie.name}
                   onClick={() => handleClick(movie)}
                 />
-              ) : (
+              ))}
+            </>
+          ) : (
+            <>
+              {movies?.map((movie) => (
                 <RowPosterNormal
+                  key={movie.id}
                   src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
                   alt={movie.name}
                   onClick={() => handleClick(movie)}
                 />
-              )}
+              ))}
             </>
-          ))}
+          )}
         </RowPosters>
         <SliderArrowRight>
-          <ArrowRight onClick={handleRight}>{">"}</ArrowRight>
+          <ArrowRight onClick={handleRight}>{'>'}</ArrowRight>
         </SliderArrowRight>
       </Slider>
       {modalOpen && (
