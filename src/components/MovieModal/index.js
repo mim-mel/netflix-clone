@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import styled, { keyframes } from "styled-components";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 const MovieModal = ({
   backdrop_path,
@@ -10,10 +12,17 @@ const MovieModal = ({
   vote_average,
   setModalOpen,
 }) => {
+
+  const ref = useRef();
+
+  useOnClickOutside(ref,()=>{
+    setModalOpen(false)
+  });
+
   return (
     <Presentation>
       <ModalWrap>
-        <Modal>
+        <Modal ref={ref}>
           <ModalClose onClick={() => setModalOpen(false)}>x</ModalClose>
           <ModalPoster
             src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
