@@ -96,7 +96,7 @@ const ModalClose = styled.span`
   color: white;
 `;
 
-const ModalPoster = styled.img`
+export const ModalPoster = styled.img`
   width: 100%;
   height: auto;
 `;
