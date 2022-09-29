@@ -13,16 +13,16 @@ const MovieModal = ({
   setModalOpen,
 }) => {
 
-  const ref = useRef();
+  const Modalref = useRef();
 
-  useOnClickOutside(ref,()=>{
+  useOnClickOutside(Modalref,()=>{
     setModalOpen(false)
   });
 
   return (
     <Presentation>
       <ModalWrap>
-        <Modal ref={ref}>
+        <Modal ref={Modalref}>
           <ModalClose onClick={() => setModalOpen(false)}>x</ModalClose>
           <ModalPoster
             src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}

@@ -2,6 +2,18 @@ import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import styled from 'styled-components';
 import MovieModal from './MovieModal';
+import './Row.css';
+
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 const Row = ({ isLargeRow, title, id, fetchUrl }) => {
   const [movies, setMovies] = useState();
@@ -33,40 +45,62 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
   return (
     <RowBlock>
       <h2>{title}</h2>
-      <Slider>
-        <SliderArrowLeft>
-          <ArrowLeft onClick={handleLeft}>{'<'}</ArrowLeft>
-        </SliderArrowLeft>
+      <Swiper
+        // install Swiper modules
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        navigation
+        pagination={{ clickable: true }}
+        loop={true}
+        breakpoints={{
+          1378: {
+            slidesPerView: 6,
+            slidesPerGroup: 6,
+          },
+          998: {
+            slidesPerView: 5,
+            slidesPerGroup: 5,
+          },
+          625: {
+            slidesPerView: 4,
+            slidesPerGroup: 4,
+          },
+          0: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
+        }}
+      >
         <RowPosters id={id}>
           {/* 값을 못찾는 것을 방지하기 위해 방어코드 작성 */}
           {isLargeRow ? (
             <>
               {movies?.map((movie) => (
-                <RowPosterLarge
-                  key={movie.id}
-                  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                  alt={movie.name}
-                  onClick={() => handleClick(movie)}
-                />
+                <SwiperSlide>
+                  <RowPosterLarge
+                    key={movie.id}
+                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                    alt={movie.name}
+                    onClick={() => handleClick(movie)}
+                  />
+                </SwiperSlide>
               ))}
             </>
           ) : (
             <>
               {movies?.map((movie) => (
-                <RowPosterNormal
-                  key={movie.id}
-                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                  alt={movie.name}
-                  onClick={() => handleClick(movie)}
-                />
+                <SwiperSlide>
+                  <RowPosterNormal
+                    key={movie.id}
+                    src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                    alt={movie.name}
+                    onClick={() => handleClick(movie)}
+                  />
+                </SwiperSlide>
               ))}
             </>
           )}
         </RowPosters>
-        <SliderArrowRight>
-          <ArrowRight onClick={handleRight}>{'>'}</ArrowRight>
-        </SliderArrowRight>
-      </Slider>
+      </Swiper>
       {modalOpen && (
         <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
       )}
@@ -77,96 +111,6 @@ const Row = ({ isLargeRow, title, id, fetchUrl }) => {
 const RowBlock = styled.section`
   margin-left: 20px;
   color: white;
-`;
-
-const SliderArrowLeft = styled.div`
-  background-clip: content-box;
-  padding: 20px 0;
-  box-sizing: border-box;
-  transition: 400ms all ease-in-out;
-  cursor: pointer;
-  width: 80px;
-  z-index: 1000;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-
-  :hover {
-    background: rgba(20, 20, 20, 0.5);
-    transition: 400ms all ease-in-out;
-  }
-`;
-
-const SliderArrowRight = styled.div`
-  padding: 20px 0;
-  background-clip: content-box;
-  box-sizing: border-box;
-  transition: 400ms all ease-in-out;
-  cursor: pointer;
-  width: 80px;
-  z-index: 1000;
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-
-  :hover {
-    background: rgba(20, 20, 20, 0.5);
-    transition: 400ms all ease-in-out;
-  }
-`;
-
-const Slider = styled.div`
-  position: relative;
-
-  :hover ${SliderArrowLeft} {
-    transition: 400ms all ease-in-out;
-    visibility: visible;
-  }
-
-  :hover ${SliderArrowRight} {
-    transition: 400ms all ease-in-out;
-    visibility: visible;
-  }
-`;
-
-const Arrow = styled.span`
-  transition: 400ms all ease-in-out;
-  :hover {
-    transition: 400ms all ease-in-out;
-    transform: scale(1.5);
-  }
-`;
-
-const ArrowLeft = styled(Arrow)`
-  position: absolute;
-  top: 0;
-  left: 20px;
-  height: 100%;
-  width: 32px;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-`;
-
-const ArrowRight = styled(Arrow)`
-  position: absolute;
-  top: 0;
-  right: 0px;
-  height: 100%;
-  width: 32px;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
 `;
 
 const RowPosters = styled.div`
